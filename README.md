@@ -179,3 +179,66 @@ moxios.wait(() => {
   done();
 });
 ```
+
+## Higher Order Component
+
+Follow these steps when creating a HOC:
+
+- Write the logic you want to reuse into a component (i.e., if your CommentBox component needs to check auth, write that logic in the CommentBox component first)
+- Create a HOC file and add the HOC scaffold
+- Move the reusable logic into the HOC
+- Pass props/config/behavior through to child component. We are responsible to make sure that whatever that's supposed to get passed to the child component are being passed thru the HOC we created
+
+Boilerplate for HOC file:
+
+```javascript
+import React from "react";
+
+export default (ChildComponent) => {
+  class ComposedComponent extends Component {
+    retnder() {
+      return <ChildComponent {...this.props} />;
+    }
+  }
+
+  return ComponsedComponent;
+};
+```
+
+## Middleware
+
+Function that intercetps betweem Actiom and Reducers. The purpose is we get the oppotunity to look at the action, and we can things like:
+
+- delay it if it's a promise/async until we get the response back
+- log it (since you have access to the action and the state before it goes to reducer)
+- modify it
+- stop it from being sent to reducer
+
+#### JSON schema
+
+Use JSON schema to build a middleware to validate redux state
+
+```bash
+npm install --save tv4
+
+```
+
+Go to `jsonschema.net` to generate a json schema file by providing a json payload.
+
+## Sever set up
+
+Use express server to build auththentication api. We will also be using mongo db
+
+```
+# create a package.json
+npm init
+# install dependencies
+npm install --save express mongoose morgan body-parser
+
+```
+
+To kick off the server,
+
+```
+node index.js
+```
