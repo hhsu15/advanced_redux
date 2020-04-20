@@ -233,7 +233,7 @@ Use express server to build auththentication api. We will also be using mongo db
 # create a package.json
 npm init
 # install dependencies
-npm install --save express mongoose morgan body-parser
+npm install --save express mongoose morgan body-parser nodemon
 
 ```
 
@@ -241,4 +241,120 @@ To kick off the server,
 
 ```
 node index.js
+```
+
+Use `nodemon` so the code change will be automatically detected and restart the server
+
+```
+npm install --save nodemon
+
+
+```
+
+then go to `package.json` and add a script
+
+```
+scripts: {
+  "dev": nodemon index.js
+}
+```
+
+Then you can start the server by running. You can just use this command to start your server :)
+
+```
+npm run dev
+```
+
+## Mongodb
+
+The installation can very much change so just refer to the documentation.
+
+Installation:
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
+
+As of this point in time, once you install mododb it creates
+
+```
+- the configuration file (/usr/local/etc/mongod.conf)
+- the log directory path (/usr/local/var/log/mongodb)
+- the data directory path (/usr/local/var/mongodb)
+
+
+```
+
+### Robomongo
+
+UI for mongodb. Create a connection and start using it.
+
+- You can write query using mongoapi which is pretty cool. For example:
+
+```
+db.getCollection('users').find({"email":"hhsu18@gmail.com"})
+```
+
+### Encrypt password
+
+Use `bcrypt-nodejs`
+
+- Install package
+
+```
+npm install --save bcrypt-nodejs
+```
+
+- refer to `authentication.js`
+
+### Authenticate User
+
+When signing up or signing in, we give a token in exchange for an id. This sounds the secret api KEY?
+
+```
+User id + our secret string = JSON Web Token(JWT)
+```
+
+In the future, when a user makes an authenticated request they should include their JWT.
+
+```
+JWT + our secret string = user id
+```
+
+- Installation
+
+```
+npm install --save jwt-simple
+```
+
+### Passport
+
+Use passport(which is an ecosystem that provides many "strategies", here we are specifically using the "jwt strategy") to handle some prevalidation before the incoming request hit the route handler.
+
+```
+Incoming request --> passport --> route handler
+```
+
+where the passport does this:
+
+```
+passport strategy1 -> verify user with a JWT
+passport strategy2 -> verify user with a username and password
+```
+
+Install passport
+
+```
+npm install --save passport passport-jwt
+```
+
+Install passport-local
+
+```
+npm install --save passport-local
+```
+
+Refer to `passport.js`. Baiscally this is what's happening:
+
+```
+sign up --> verify email is not in use --> token
+sign in --> verify email/password --> token
+auth'd request --> verify token --> resource access
 ```
