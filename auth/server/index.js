@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const router = require("./router");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 
 // DB set up
@@ -13,6 +14,8 @@ mongoose.connect("mongodb://localhost/auth");
 // app set up
 // morgan and bodyParser are middlewares
 app.use(morgan("combined")); // morgan is a logging framework so you will see the incoming requests
+app.use(cors()); // you can configure this to allow specific hosts
+
 app.use(bodyParser.json({ type: "*/*" })); // parse every incoming request to json, the regex pattern means it takes any request type
 
 // wire router to app

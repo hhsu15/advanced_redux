@@ -1,0 +1,10 @@
+.header {
+  /* show the items in the same line */
+  display: flex;
+  /* this will maxmize the space between each elements */
+  justify-content: space-between;
+}
+
+.header a {
+  margin: 0 10px;
+}

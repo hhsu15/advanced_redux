@@ -332,7 +332,7 @@ Use passport(which is an ecosystem that provides many "strategies", here we are 
 Incoming request --> passport --> route handler
 ```
 
-where the passport does this:
+where in our example, the passport does this:
 
 ```
 passport strategy1 -> verify user with a JWT
@@ -358,3 +358,50 @@ sign up --> verify email is not in use --> token
 sign in --> verify email/password --> token
 auth'd request --> verify token --> resource access
 ```
+
+### CORS
+
+Cross Origin Resource Sharing. A security impleted inside of the Browser.
+
+### Example
+
+If some hacker creates a fishing website trying to trick the user to login to thier bank account and transfer money. You can imagine that the browser is going to find out: you are trying to call an API that has a different domain. The browser is going to make a request to the server asking "hey you have a request coming from a different domain.". (to be precise, it also checks the subdomain and port, ) The backend server has then the options to either allow the request or disallow the request.
+
+This is why when we are trying to make a call to the api which is in say "localhost:3090" from localhost:3000 it will by default be rejected by CORS.
+
+For API client like Postman or when you run crul on the terminal, the client is not a browser so we get to by pass this issue.
+
+To solve this we will use `cors`
+
+```
+npm install --save cors
+```
+
+## Client Side Auth
+
+Refer to `client/`
+
+Couple of steps here:
+
+- create multiple routes for Sign up, Sign in, Sign out and feature. This is done thru 'react-router-dom'.
+- Use React Form to manage the form creation and submission and form state.
+- When user tries to sign in, calling the server with form props which has email and password, the server checks the email and password and returns token once successed.
+- State records if a user is a authorized, or if error it will have the error message.
+- Once user is signed up, we direct the user to `/feature` page using the `this.props.history.push()` thru a callback. This is done in the action creator fucntion.
+- If the user is not signed in, we will not allow the user to access the `/feature`. We will do this thru Higher Order Component. Refer to the code. `requreAuth.js`
+
+### localstorage (to persist the loggin state)
+
+Everytime when we refresh the webpage the state is gone. So if a user is authorized but then refreshes the page he will have to relogin again. To solve this issue, browser has so called `localstorage`. We can simple use
+
+```javascript
+localStorage.setItem("someKey", "someValue");
+localStorage.getItem("someKey"); // will return "someValue"
+```
+
+Here are the steps:
+
+- In the action creator, when user is authorized we set the token in the localstore
+- In the `src/index.js`, when we create the redux store, we provide the localstore as the initial state. If the localstore has the token then the user is considered authorized. A user can refresh the page and still be logged in.
+- When user is trying to signout, we will remove the localstorage and provide a new state (basically just empty token).
+- In terms of the links we display, we will check if the user is sign in, then we show `sign out`, otherwise we will show `sign in` and `sign up`.
